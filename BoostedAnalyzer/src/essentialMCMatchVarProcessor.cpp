@@ -142,7 +142,9 @@ void essentialMCMatchVarProcessor::Process(const InputCollections& input,Variabl
   
   int iBB = 0;
   int iCC = 0;
-  
+
+  if(input.sampleType == SampleType::tt4b) iBB = 5;
+  if(input.sampleType == SampleType::ttbbb) iBB = 4;
   if(input.sampleType == SampleType::ttbb) iBB = 3;
   if(input.sampleType == SampleType::ttb) iBB = 1;
   if(input.sampleType == SampleType::tt2b) iBB = 2;

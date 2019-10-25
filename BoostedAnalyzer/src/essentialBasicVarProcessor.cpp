@@ -72,7 +72,7 @@ void essentialBasicVarProcessor::Init(const InputCollections& input,VariableCont
 //   
 //   vars.InitVars( "TaggedJet_E","N_BTagsM" );
 //   vars.InitVars( "TaggedJet_M","N_BTagsM" );
-//   vars.InitVars( "TaggedJet_Pt","N_BTagsM" );
+  vars.InitVars( "TaggedJet_Pt","N_BTagsM" );
 //   vars.InitVars( "TaggedJet_Phi","N_BTagsM" );
 //   vars.InitVars( "TaggedJet_Eta","N_BTagsM" );
   
@@ -110,6 +110,7 @@ void essentialBasicVarProcessor::Init(const InputCollections& input,VariableCont
 //   vars.InitVar("Evt_M3_OneJetTagged");
   vars.InitVar("Evt_MTW");
   vars.InitVar("Evt_HT");
+  vars.InitVar("Evt_HT_tagged");
   vars.InitVar("Evt_HT_Jets");
   vars.InitVar("Evt_M_Total");
   vars.InitVar("Evt_MHT");
@@ -234,14 +235,14 @@ void essentialBasicVarProcessor::Process(const InputCollections& input,VariableC
   
   
   // Tagged Jets
-//   for(std::vector<pat::Jet>::iterator itTaggedJet = selectedTaggedJets.begin() ; itTaggedJet != selectedTaggedJets.end(); ++itTaggedJet){
-//     int iTaggedJet = itTaggedJet - selectedTaggedJets.begin();
+  for(std::vector<pat::Jet>::iterator itTaggedJet = selectedTaggedJets.begin() ; itTaggedJet != selectedTaggedJets.end(); ++itTaggedJet){
+    int iTaggedJet = itTaggedJet - selectedTaggedJets.begin();
 //     vars.FillVars( "TaggedJet_E",iTaggedJet,itTaggedJet->energy() );
 //     vars.FillVars( "TaggedJet_M",iTaggedJet,itTaggedJet->mass() );
-//     vars.FillVars( "TaggedJet_Pt",iTaggedJet,itTaggedJet->pt() );
+    vars.FillVars( "TaggedJet_Pt",iTaggedJet,itTaggedJet->pt() );
 //     vars.FillVars( "TaggedJet_Eta",iTaggedJet,itTaggedJet->eta() );
 //     vars.FillVars( "TaggedJet_Phi",iTaggedJet,itTaggedJet->phi() );
-//   }
+  }
   
   // Fill Lepton Variables
   std::vector<math::XYZTLorentzVector> looseLeptonVecs = BoostedUtils::GetLepVecs(input.selectedElectronsLoose,input.selectedMuonsLoose);
@@ -343,6 +344,10 @@ void essentialBasicVarProcessor::Process(const InputCollections& input,VariableC
   float htjets = 0.;
   float mht_px = 0.;
   float mht_py = 0.;
+  float ht_tagged = 0.;
+  for(std::vector<pat::Jet>::iterator itTaggedJet = selectedTaggedJets.begin() ; itTaggedJet != selectedTaggedJets.end(); ++itTaggedJet){
+    ht_tagged += itTaggedJet->pt();
+  }
   for(std::vector<pat::Jet>::const_iterator itJet = input.selectedJets.begin() ; itJet != input.selectedJets.end(); ++itJet){
     ht += itJet->pt();
     htjets += itJet->pt();
@@ -366,7 +371,8 @@ void essentialBasicVarProcessor::Process(const InputCollections& input,VariableC
   vars.FillVar("Evt_HT",ht);
   vars.FillVar("Evt_MHT",sqrt( mht_px*mht_px + mht_py*mht_py ));
   vars.FillVar("Evt_HT_Jets",htjets);
-  
+  vars.FillVar("Evt_HT_tagged",ht_tagged); 
+ 
   // Fill Event Mass
   math::XYZTLorentzVector p4all;
   for(std::vector<math::XYZTLorentzVector>::iterator itJetVec = jetvecs.begin() ; itJetVec != jetvecs.end(); ++itJetVec){

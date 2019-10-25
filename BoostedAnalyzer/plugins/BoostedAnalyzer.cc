@@ -782,12 +782,13 @@ void BoostedAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& i
     else if(foundT&&foundTbar&&foundHiggs) sampleType = SampleType::tth;
     else if(foundT&&foundTbar){
 	sampleType =SampleType::ttl;
-	//if(ttid==51||ttid==52) sampleType = SampleType::ttb;
 	if(ttid==51) sampleType = SampleType::ttb;
 	else if(ttid==52) sampleType = SampleType::tt2b;
 	else if(ttid==53||ttid==54||ttid==55) sampleType = SampleType::ttbb;
 	else if(ttid==41||ttid==42) sampleType = SampleType::ttcc;
 	else if(ttid==43||ttid==44||ttid==45) sampleType = SampleType::ttcc;
+        else if(ttid==63||ttid==64||ttid==65) sampleType = SampleType::ttbbb;
+        else if(ttid==73||ttid==74||ttid==75) sampleType = SampleType::tt4b;
     }
     else if(((foundT&&!foundTbar)||(!foundT&&foundTbar))&&foundHiggs) sampleType = SampleType::thq;
     
